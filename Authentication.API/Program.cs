@@ -1,4 +1,7 @@
 using Authentication.API.Data;
+using Authentication.API.Mapping;
+using Authentication.API.Services.Implementations;
+using Authentication.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -17,9 +20,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ApplicationAuthDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("AuthString")));
 
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationAuthDbContext>()
     .AddTokenProvider<DataProtectorTokenProvider<ApplicationUser>>("BlazorAuth")
     .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IIdentityService, IdentityService>();
 
 
 builder.Services.Configure<IdentityOptions>(options =>
