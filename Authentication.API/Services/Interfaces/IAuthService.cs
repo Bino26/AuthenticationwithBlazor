@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace Authentication.API.Services.Interfaces
 {
-    public interface IIdentityService
+    public interface IAuthService
     {
         Task<bool> CreateUserAsync(RegisterRequestDto createUserDto);
         Task<LoginResponseDto> LoginAsync(LoginRequestDto loginRequestDto);

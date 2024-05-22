@@ -13,7 +13,6 @@ namespace Authentication.API.Models.DTOs
         public string Email { get; set; }
         [DataType(DataType.Password)]
         public string Password { get; set; }
-
-        public string[] Roles { get; set; }
+        public List <string>? Roles { get; set; }
     }
 }

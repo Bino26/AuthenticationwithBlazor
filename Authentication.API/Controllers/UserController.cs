@@ -11,9 +11,9 @@ namespace Authentication.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IIdentityService authService;
+        private readonly IAuthService authService;
 
-        public UserController(IIdentityService authService)
+        public UserController(IAuthService authService)
         {
             this.authService = authService;
         }

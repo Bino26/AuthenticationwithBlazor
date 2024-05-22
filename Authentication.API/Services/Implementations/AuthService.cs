@@ -8,14 +8,14 @@ using System.Security.Claims;
 
 namespace Authentication.API.Services.Implementations
 {
-    public class IdentityService:IIdentityService
+    public class AuthService:IAuthService
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IMapper mapper;
         private readonly ITokenService tokenService;
 
-        public IdentityService(
+        public AuthService(
             UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IMapper mapper, ITokenService tokenService)
         {
             this.userManager = userManager;
@@ -32,9 +32,12 @@ namespace Authentication.API.Services.Implementations
                 Email = createUserDto.Email,
             };
             var result = await userManager.CreateAsync(user, createUserDto.Password);
-            if (result.Succeeded && createUserDto.Roles != null && createUserDto.Roles.Any())
+            if (result.Succeeded )
             {
-                result = await userManager.AddToRolesAsync(user, createUserDto.Roles);
+                var roles = createUserDto.Roles ?? new List<string>();
+                roles.Add("Reader");
+
+                result = await userManager.AddToRolesAsync(user, roles);
             }
             return result.Succeeded;
         }
