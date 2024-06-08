@@ -15,14 +15,14 @@ namespace Authentication.API.Services.Implementations
             this.configuration = configuration;
         }
 
-        public async Task<string> GenerateJwtTokenAsync(string userName, IList<string> roles)
+        public async Task<string> GenerateJwtTokenAsync(string Email, IList<string> roles)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(configuration["Jwt:Key"]);
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, userName)
+                new Claim(ClaimTypes.Email, Email)
             };
 
             foreach (var role in roles)

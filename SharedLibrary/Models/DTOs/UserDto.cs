@@ -1,4 +1,4 @@
-﻿namespace Authentication.API.Models.DTOs
+﻿namespace SharedLibrary.Models.DTOs
 {
     public class UserDto
     {

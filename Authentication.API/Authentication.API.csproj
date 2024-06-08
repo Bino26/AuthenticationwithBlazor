@@ -25,9 +25,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\Domains\" />
     <Folder Include="Repositories\Implementations\" />
     <Folder Include="Repositories\Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SharedLibrary\SharedLibrary.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,14 +1,14 @@
 ﻿using Authentication.API.Data;
-using Authentication.API.Models.DTOs;
 using Authentication.API.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SharedLibrary.Models.DTOs;
 using System.Security.Claims;
 
 namespace Authentication.API.Services.Implementations
 {
-    public class AuthService:IAuthService
+    public class AuthService : IAuthService
     {
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
@@ -28,11 +28,11 @@ namespace Authentication.API.Services.Implementations
         {
             var user = new ApplicationUser
             {
-                UserName = createUserDto.Username,
+                UserName = createUserDto.Email,
                 Email = createUserDto.Email,
             };
             var result = await userManager.CreateAsync(user, createUserDto.Password);
-            if (result.Succeeded )
+            if (result.Succeeded)
             {
                 var roles = createUserDto.Roles ?? new List<string>();
                 roles.Add("Reader");
@@ -92,7 +92,7 @@ namespace Authentication.API.Services.Implementations
                 if (signInResult.Succeeded)
                 {
                     var roles = await userManager.GetRolesAsync(user);
-                    var token = await tokenService.GenerateJwtTokenAsync(user.UserName, roles);
+                    var token = await tokenService.GenerateJwtTokenAsync(user.Email, roles);
 
 
                     return new LoginResponseDto

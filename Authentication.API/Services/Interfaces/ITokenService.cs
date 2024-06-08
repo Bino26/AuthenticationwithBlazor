@@ -2,6 +2,6 @@
 {
     public interface ITokenService
     {
-        Task<string> GenerateJwtTokenAsync(string userName, IList<string> roles);
+        Task<string> GenerateJwtTokenAsync(string Email, IList<string> roles);
     }
 }

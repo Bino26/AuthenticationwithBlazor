@@ -1,5 +1,5 @@
-﻿using Authentication.API.Models.DTOs;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using SharedLibrary.Models.DTOs;
 using System.Security.Claims;
 
 namespace Authentication.API.Services.Interfaces

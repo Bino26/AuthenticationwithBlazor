@@ -1,9 +1,8 @@
 ﻿using Authentication.API.Filters;
-using Authentication.API.Models.DTOs;
 using Authentication.API.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SharedLibrary.Models.DTOs;
 
 namespace Authentication.API.Controllers
 {
