@@ -1,0 +1,27 @@
+﻿@page "/register"
+
+<PageTitle>Login</PageTitle>
+<MudText Typo="Typo.h3" GutterBottom="true">Login</MudText>
+
+<EditForm Model="@student" OnValidSubmit="SaveStudent">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Email"
+                                  @bind-Value="student.Name" For="@(() => student.Name)" />
+                    <MudTextField Label="Password" Class="mt-3"
+                                  @bind-Value="student.Email" For="@(() => student.Email)" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudPaper Class="d-flex flex-column flex-grow-1 gap-4" Elevation="0">
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">@Title</MudButton>
+                        <MudButton @onclick="@(() => HomePage())" Variant="Variant.Filled" Color="Color.Secondary">Cancel</MudButton>
+                    </MudPaper>
+                </MudCardActions>
+
+            </MudCard>
+        </MudItem>
+    </MudGrid>
+</EditForm>
