@@ -1,23 +1,27 @@
-﻿@* @page "/register"
+﻿@page "/register"
+@inject AuthenticationStateProvider authStateProvider
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+@inject ISnackbar snackbar
 
-<PageTitle>Login</PageTitle>
+
+<PageTitle>Register</PageTitle>
 <MudText Typo="Typo.h3" GutterBottom="true">Login</MudText>
 
-<EditForm Model="@student" OnValidSubmit="SaveStudent">
+<EditForm Model="@RegisterUser" OnValidSubmit="HandleRegister">
     <DataAnnotationsValidator />
     <MudGrid>
         <MudItem xs="12" sm="7">
             <MudCard>
                 <MudCardContent>
                     <MudTextField Label="Email"
-                                  @bind-Value="student.Name" For="@(() => student.Name)" />
+                                  @bind-Value="RegisterUser.Email" For="@(() => RegisterUser.Email)" />
                     <MudTextField Label="Password" Class="mt-3"
-                                  @bind-Value="student.Email" For="@(() => student.Email)" />
+                                  @bind-Value="RegisterUser.Password" For="@(() => RegisterUser.Password)" />
                 </MudCardContent>
                 <MudCardActions>
                     <MudPaper Class="d-flex flex-column flex-grow-1 gap-4" Elevation="0">
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">@Title</MudButton>
-                        <MudButton @onclick="@(() => HomePage())" Variant="Variant.Filled" Color="Color.Secondary">Cancel</MudButton>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary">Register</MudButton>
                     </MudPaper>
                 </MudCardActions>
 
@@ -25,4 +29,23 @@
         </MudItem>
     </MudGrid>
 </EditForm>
- *@
+
+
+@code {
+    private RegisterRequest RegisterUser { get; set; } = new();
+    private string? Message;
+    private async Task HandleRegister()
+    {
+        Message = string.Empty;
+        var response = await httpClient.PostAsJsonAsync("api/user/register", RegisterUser);
+        if (!response.IsSuccessStatusCode)
+        {
+            Message = "Error occured";
+            snackbar.Add("Registration Failed", Severity.Error);
+            return;
+        }
+        RegisterUser = new();
+        snackbar.Add("Registered with sucess", Severity.Success);
+        navigationManager.NavigateTo("/login");
+    }
+}

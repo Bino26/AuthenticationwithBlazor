@@ -2,6 +2,7 @@
 @inject AuthenticationStateProvider authStateProvider
 @inject HttpClient httpClient
 @inject NavigationManager navigationManager
+@inject ISnackbar snackbar
 
 
 <PageTitle>Login</PageTitle>
@@ -39,7 +40,7 @@
         var response = await httpClient.PostAsJsonAsync("api/user/login", LoginUser);
         if (!response.IsSuccessStatusCode)
         {
-            Message = "Invalid Credentials";
+            snackbar.Add("Invalid Credentials", Severity.Error);
             return;
         }
 
@@ -60,6 +61,7 @@
 
         var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
         await customAuthStateProvider.UpdateAuthenticationState(authenticationModel);
+        snackbar.Add("Logged with sucess", Severity.Success);
         navigationManager.NavigateTo("/");
     }
 }
