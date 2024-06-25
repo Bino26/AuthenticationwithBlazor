@@ -1,8 +1,8 @@
 ﻿namespace SharedLibrary.Models.DTOs
 {
-    public class LoginResponseDto
+    public class LoginResponse
     {
-        public UserDto? User { get; set; }
+        //public UserDto? User { get; set; }
         public string JwtToken { get; set; } = null!;
 
     }

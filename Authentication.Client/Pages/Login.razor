@@ -1,23 +1,26 @@
 ﻿@page "/login"
+@inject AuthenticationStateProvider authStateProvider
+@inject HttpClient httpClient
+@inject NavigationManager navigationManager
+
 
 <PageTitle>Login</PageTitle>
 <MudText Typo="Typo.h3" GutterBottom="true">Login</MudText>
 
-<EditForm Model="@student" OnValidSubmit="SaveStudent">
+<EditForm Model="@LoginUser" OnValidSubmit="HandleLogin">
     <DataAnnotationsValidator />
     <MudGrid>
         <MudItem xs="12" sm="7">
             <MudCard>
                 <MudCardContent>
                     <MudTextField Label="Email" 
-                                  @bind-Value="student.Name" For="@(() => student.Name)" />
+                                  @bind-Value="LoginUser.Email" For="@(() => LoginUser.Email)" />
                     <MudTextField Label="Password"  Class="mt-3"
-                                  @bind-Value="student.Email" For="@(() => student.Email)"/>
+                                  @bind-Value="LoginUser.Password" For="@(() => LoginUser.Password)"/>
                 </MudCardContent>
                 <MudCardActions>
                     <MudPaper Class="d-flex flex-column flex-grow-1 gap-4" Elevation="0">
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" >@Title</MudButton>
-                        <MudButton @onclick = "@(() => HomePage())" Variant="Variant.Filled" Color="Color.Secondary" >Cancel</MudButton>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" >Login</MudButton>
                     </MudPaper>
                 </MudCardActions>
 
@@ -28,5 +31,35 @@
 
 
 @code {
+    private LoginRequest LoginUser { get; set; } = new();
+    private string? Message;
+    private async Task HandleLogin()
+    {
+        Message = string.Empty;
+        var response = await httpClient.PostAsJsonAsync("api/user/login", LoginUser);
+        if (!response.IsSuccessStatusCode)
+        {
+            Message = "Invalid Credentials";
+            return;
+        }
 
+        var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
+        if (string.IsNullOrEmpty(result!.JwtToken)) return;
+
+        httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", result.JwtToken);
+        var getUserClaims = await httpClient.GetAsync("api/user/user");
+        if (!getUserClaims.IsSuccessStatusCode) return;
+
+        var userDetails = await getUserClaims.Content.ReadFromJsonAsync<User>();
+        var authenticationModel = new AuthenticationModel()
+            {
+                Token = result.JwtToken,
+                RefreshToken = result.JwtToken,
+                Username = userDetails!.Email
+            };
+
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(authenticationModel);
+        navigationManager.NavigateTo("/");
+    }
 }

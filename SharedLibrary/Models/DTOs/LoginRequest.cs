@@ -2,7 +2,7 @@
 
 namespace SharedLibrary.Models.DTOs
 {
-    public class LoginRequestDto
+    public class LoginRequest
     {
         [Required]
         [DataType(DataType.EmailAddress)]

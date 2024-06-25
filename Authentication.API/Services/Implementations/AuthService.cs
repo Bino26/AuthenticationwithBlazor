@@ -24,7 +24,7 @@ namespace Authentication.API.Services.Implementations
             this.tokenService = tokenService;
         }
 
-        public async Task<bool> CreateUserAsync(RegisterRequestDto createUserDto)
+        public async Task<bool> CreateUserAsync(RegisterRequest createUserDto)
         {
             var user = new ApplicationUser
             {
@@ -71,8 +71,14 @@ namespace Authentication.API.Services.Implementations
             {
                 return new NotFoundObjectResult("User not found");
             }
-            return new OkObjectResult(existingUser);
-            //return mapper.Map<UserDto>(user)
+            var userDetails = new User
+            {
+                Id = existingUser.Id,
+                Username = existingUser.UserName,
+                Email = existingUser.Email
+            };
+            return new OkObjectResult(userDetails);
+
         }
 
         //public async Task<List<UserDto>> GetAllUsersAsync()
@@ -81,7 +87,7 @@ namespace Authentication.API.Services.Implementations
         //    return mapper.Map<List<UserDto>>(users);
         //}
 
-        public async Task<LoginResponseDto> LoginAsync(LoginRequestDto loginRequestDto)
+        public async Task<LoginResponse> LoginAsync(LoginRequest loginRequestDto)
         {
             var user = await userManager.FindByEmailAsync(loginRequestDto.Email);
             if (user != null)
@@ -95,7 +101,7 @@ namespace Authentication.API.Services.Implementations
                     var token = await tokenService.GenerateJwtTokenAsync(user.Email, roles);
 
 
-                    return new LoginResponseDto
+                    return new LoginResponse
                     {
                         JwtToken = token,
                         //User = mapper.Map<UserDto>(user),

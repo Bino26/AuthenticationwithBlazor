@@ -21,7 +21,7 @@ namespace Authentication.API.Controllers
         [Route("register")]
         [ValidateModel]
 
-        public async Task<IActionResult> Register([FromBody] RegisterRequestDto createUserDto)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest createUserDto)
         {
             var user = await authService.CreateUserAsync(createUserDto);
             if (user != false)
@@ -34,7 +34,7 @@ namespace Authentication.API.Controllers
         [HttpPost]
         [Route("login")]
 
-        public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
+        public async Task<IActionResult> Login([FromBody] LoginRequest loginRequestDto)
         {
             var loginResponse = await authService.LoginAsync(loginRequestDto);
             if (loginResponse == null || string.IsNullOrEmpty(loginResponse.JwtToken))
@@ -43,7 +43,7 @@ namespace Authentication.API.Controllers
 
             }
 
-            return Ok("User logged successfuly");
+            return Ok(loginResponse);
 
         }
 

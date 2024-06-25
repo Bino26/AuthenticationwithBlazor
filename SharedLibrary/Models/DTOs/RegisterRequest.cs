@@ -2,7 +2,7 @@
 
 namespace SharedLibrary.Models.DTOs
 {
-    public class RegisterRequestDto
+    public class RegisterRequest
     {
 
         [Required]

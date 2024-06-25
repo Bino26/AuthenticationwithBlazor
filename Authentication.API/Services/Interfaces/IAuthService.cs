@@ -6,8 +6,8 @@ namespace Authentication.API.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<bool> CreateUserAsync(RegisterRequestDto createUserDto);
-        Task<LoginResponseDto> LoginAsync(LoginRequestDto loginRequestDto);
+        Task<bool> CreateUserAsync(RegisterRequest createUserDto);
+        Task<LoginResponse> LoginAsync(LoginRequest loginRequestDto);
 
         //Task<IActionResult> UpdateAsync(UpdateUserDto updateUserDto, ClaimsPrincipal user);
 

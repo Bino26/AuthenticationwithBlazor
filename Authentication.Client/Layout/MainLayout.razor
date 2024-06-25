@@ -1,4 +1,7 @@
-﻿@inherits LayoutComponentBase
+﻿@using Authentication.Client.Layout
+@inherits LayoutComponentBase
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navigationManager
 
 <MudThemeProvider />
 <MudDialogProvider />
@@ -10,6 +13,15 @@
         <MudSpacer />
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" /> 
     </MudAppBar>
+    <AuthorizeView>
+        <Authorized>
+            <MudText>@context.User.Identity!.Name</MudText>
+            <MudButton Variant="Variant.Filled" Color="Color.Secondary" @onclick="Logout">LogOut</MudButton>
+        </Authorized>
+        <NotAuthorized>
+            <NavMenu/>
+        </NotAuthorized>
+    </AuthorizeView>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
     </MudDrawer>
     <MudMainContent>
@@ -25,5 +37,11 @@
     void DrawerToggle()
     {
         _drawerOpen = !_drawerOpen;
+    }
+    private async Task Logout()
+    {
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(null!);
+        navigationManager.NavigateTo("/", replace: true);
     }
 }
