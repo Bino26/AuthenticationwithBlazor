@@ -9,18 +9,22 @@
 
 <MudLayout>
     <MudAppBar Class="pa-4 d-flex justify-space-evenly" Elevation="0">
-        <NavMenu />
+        <AuthorizeView>
+            <NotAuthorized>
+                <MudNavLink Href="register" Match="NavLinkMatch.Prefix">Register</MudNavLink>
+                <MudSpacer />
+                <MudNavLink Href="login" Match="NavLinkMatch.Prefix">Login</MudNavLink>
+            </NotAuthorized>
+            <Authorized>
+                <MudText>@context.User.Identity!.Name</MudText>
+                <MudIconButton Icon="@Icons.Material.Filled.Logout" Color="Color.Inherit" Title="Logout" @onclick="Logout">LogOut</MudIconButton>
+            </Authorized>
+        </AuthorizeView>
         <MudSpacer />
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" /> 
     </MudAppBar>
     <AuthorizeView>
-        <Authorized>
-            <MudText>@context.User.Identity!.Name</MudText>
-            <MudButton Variant="Variant.Filled" Color="Color.Secondary" @onclick="Logout">LogOut</MudButton>
-        </Authorized>
-        <NotAuthorized>
-            <NavMenu/>
-        </NotAuthorized>
+        
     </AuthorizeView>
     <MudDrawer @bind-Open="_drawerOpen" Elevation="1">
     </MudDrawer>
